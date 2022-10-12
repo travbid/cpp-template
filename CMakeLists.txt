@@ -50,7 +50,10 @@ set(cppsample_headers
   export.hpp
 )
 
-add_library(cppsample_objects OBJECT add.cpp ${cppsample_headers})
+add_library(cppsample_objects OBJECT
+  add.cpp
+  ${cppsample_headers}
+)
 
 if(MSVC)
   add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)

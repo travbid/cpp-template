@@ -2,4 +2,4 @@
 
 #include "export.hpp"
 
-float add(float a, float b);
+EXPORT float add(float a, float b);
