@@ -32,6 +32,18 @@ endif()
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
+if(MSVC)
+  add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
+  if (MSVC_VERSION GREATER_EQUAL 1910)
+    add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/permissive->)
+  endif()
+  add_compile_options(/W4 /WX)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+add_compile_definitions(PRIVATE CPPSAMPLE_BUILD)
+
 # cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
@@ -56,18 +68,6 @@ add_library(cppsample_objects OBJECT
   add.cpp
   ${cppsample_headers}
 )
-
-if(MSVC)
-  add_compile_options($<$<COMPILE_LANGUAGE:C,CXX>:/utf-8>)
-  if (MSVC_VERSION GREATER_EQUAL 1910)
-    add_compile_options(cppsample_objects PUBLIC $<$<COMPILE_LANGUAGE:C,CXX>:/permissive->)
-  endif()
-  target_compile_options(cppsample_objects PRIVATE /W4 /WX)
-else()
-  target_compile_options(cppsample_objects PRIVATE -Wall -Wextra -Wpedantic)
-endif()
-
-target_compile_definitions(cppsample_objects PRIVATE CPPSAMPLE_BUILD)
 
 if(BUILD_SHARED_LIBS)
   add_library(cppsample SHARED $<TARGET_OBJECTS:cppsample_objects>)
