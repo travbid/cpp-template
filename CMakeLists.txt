@@ -30,6 +30,8 @@ if (CMAKE_GENERATOR STREQUAL "Ninja")
   add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,Clang>:$<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,3.5>:-fcolor-diagnostics>>)
 endif()
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 # cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
