@@ -42,4 +42,10 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+find_package(gtest CONFIG REQUIRED
+  NO_DEFAULT_PATH
+  PATHS ${CMAKE_BINARY_DIR}
+)
+
 add_subdirectory(src)
+add_subdirectory(test)

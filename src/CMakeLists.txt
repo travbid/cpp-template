@@ -40,9 +40,13 @@ endif()
 
 add_library(trav::cppsample ALIAS cppsample)
 
+target_include_directories(cppsample
+  PUBLIC ${PROJECT_SOURCE_DIR}/include
+  PUBLIC ${CMAKE_BINARY_DIR}/src
+)
+
 include(GenerateExportHeader)
 generate_export_header(cppsample)
-
 
 set_property(TARGET cppsample
   PROPERTY PUBLIC_HEADER ${cppsample_headers}
