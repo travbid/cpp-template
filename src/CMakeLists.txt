@@ -1,6 +1,4 @@
 
-add_compile_definitions(PRIVATE CPPSAMPLE_BUILD)
-
 # cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
