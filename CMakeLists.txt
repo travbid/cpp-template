@@ -9,6 +9,8 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+option(USE_LTO "Enable Link-Time Optimization for Release builds" ON)
+
 # https://www.kitware.com/cmake-and-the-default-build-type/
 # Set a default build type if none was specified
 set(default_build_type "Release")
@@ -46,6 +48,20 @@ find_package(GTest CONFIG REQUIRED
   NO_DEFAULT_PATH
   PATHS ${CMAKE_BINARY_DIR}
 )
+
+if (USE_LTO)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
+  if(ipo_result)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_DEBUG FALSE)
+    message(STATUS "Link-time Optimization enabled for release builds")
+  else()
+    message(FATAL_ERROR "IPO is not supported: ${ipo_output}")
+  endif()
+else()
+message(STATUS "Link-time Optimization disabled")
+endif()
 
 add_subdirectory(src)
 add_subdirectory(test)

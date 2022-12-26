@@ -1,13 +1,4 @@
 
-# cmake_policy(SET CMP0069 NEW)
-include(CheckIPOSupported)
-check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
-if(ipo_result)
-  set(INTERPROCEDURAL_OPTIMIZATION TRUE)
-else()
-  message(WARNING "IPO is not supported: ${ipo_output}")
-endif()
-
 if(NOT APPLE)
   set(CMAKE_INSTALL_RPATH $ORIGIN)
 endif()
