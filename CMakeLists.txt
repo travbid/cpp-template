@@ -42,7 +42,7 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-find_package(gtest CONFIG REQUIRED
+find_package(GTest CONFIG REQUIRED
   NO_DEFAULT_PATH
   PATHS ${CMAKE_BINARY_DIR}
 )
