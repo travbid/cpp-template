@@ -1,0 +1,80 @@
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - ci
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
+
+env:
+  CONAN_REVISIONS_ENABLED: '1'
+  CONAN_PRINT_RUN_COMMANDS: '1'
+
+jobs:
+  build-gcc:
+    name: Build and Install (gcc)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/configure-project
+        with:
+          build_dir: build_gcc
+          build_type: Release
+          c_compiler: gcc
+          cpp_compiler: g++
+      - run: cmake --build build_gcc --config Release --verbose
+      - run: tree .
+      - run: cmake --install build_gcc --prefix=./build_gcc/install
+      - run: tree .
+
+  build-clang:
+    name: Build with clang
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/configure-project
+        with:
+          build_dir: build_clang
+          build_type: Release
+          c_compiler: clang
+          cpp_compiler: clang++
+      - run: cmake --build build_clang --config Release --verbose
+      - run: tree .
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/configure-project
+        with:
+          build_dir: build_test
+          build_type: RelWithDebInfo
+      - run: cmake --build build_test --target cppsample_test --config Release --verbose
+      - run: ./build_test/test/cppsample_test
+
+  static-analyse:
+    name: Static Analyse
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/configure-project
+        with:
+          build_dir: build_tidy
+          build_type: RelWithDebInfo
+          c_compiler: clang
+          cpp_compiler: clang++
+      - run: python3 run-clang-tidy.py -p build_tidy
