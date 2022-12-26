@@ -60,3 +60,8 @@ install(TARGETS cppsample
 
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE cppsample)
+
+install(TARGETS main
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    COMPONENT main
+)
