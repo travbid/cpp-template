@@ -62,7 +62,7 @@ jobs:
         with:
           build_dir: build_test
           build_type: RelWithDebInfo
-      - run: cmake --build build_test --target cppsample_test --config Release --verbose
+      - run: cmake --build build_test --target cppsample_test --config RelWithDebInfo --verbose
       - run: ./build_test/test/cppsample_test
 
   static-analyse:
@@ -74,7 +74,6 @@ jobs:
       - uses: ./.github/configure-project
         with:
           build_dir: build_tidy
-          build_type: RelWithDebInfo
           c_compiler: clang
           cpp_compiler: clang++
       - run: python3 run-clang-tidy.py -p build_tidy
