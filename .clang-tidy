@@ -1,10 +1,9 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,*,-altera-id-dependent-backward-branch,-altera-struct-pack-align,-altera-unroll-loops,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-use-auto,-hicpp-uppercase-literal-suffix,-hicpp-vararg,-llvmlibc-*,-modernize-use-auto,-modernize-use-trailing-return-type,-readability-magic-numbers,-readability-uppercase-literal-suffix'
+Checks:          '*,-altera*,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-use-auto,-hicpp-uppercase-literal-suffix,-hicpp-vararg,-llvmlibc-*,-modernize-use-auto,-modernize-use-trailing-return-type,-readability-magic-numbers,-readability-uppercase-literal-suffix'
 WarningsAsErrors: ''
-HeaderFilterRegex: 'SDK'
+HeaderFilterRegex: 'cpp-template'
 AnalyzeTemporaryDtors: false
 FormatStyle:     file
-User:            travers
 CheckOptions:
   - key:             llvm-else-after-return.WarnOnConditionVariables
     value:           'false'
