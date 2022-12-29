@@ -36,8 +36,12 @@ endif()
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_compile_options("$<IF:$<CXX_COMPILER_ID:MSVC>,/utf-8;/W4;/WX,-Wall;-Wextra;-Wpedantic>")
-add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,MSVC>:$<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,19.10>:/permissive->>)
+if(MSVC)
+  add_compile_options(/utf-8 /W4 /WX)
+  add_compile_options($<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,19.10>:/permissive->)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
 find_package(GTest CONFIG REQUIRED
   NO_DEFAULT_PATH
