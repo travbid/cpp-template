@@ -12,6 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 option(USE_LTO "Enable Link-Time Optimization for Release builds" ON)
+option(BUILD_TESTS "Build the tests" ON)
 
 # https://www.kitware.com/cmake-and-the-default-build-type/
 # Set a default build type if none was specified
@@ -43,11 +44,6 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-find_package(GTest CONFIG REQUIRED
-  NO_DEFAULT_PATH
-  PATHS ${CMAKE_BINARY_DIR}
-)
-
 if (USE_LTO)
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
@@ -63,4 +59,11 @@ message(STATUS "Link-time Optimization disabled")
 endif()
 
 add_subdirectory(src)
-add_subdirectory(test)
+
+if(BUILD_TESTS)
+  find_package(GTest CONFIG REQUIRED
+    NO_DEFAULT_PATH
+    PATHS ${CMAKE_BINARY_DIR}
+  )
+  add_subdirectory(test)
+endif()
