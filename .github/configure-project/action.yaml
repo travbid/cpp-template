@@ -11,6 +11,10 @@ inputs:
     default: 'clang'
   cpp_compiler:
     default: 'clang++'
+  extra_cmake_options:
+    default: ''
+  extra_conan_options:
+    default: ''
 
 runs:
   using: "composite"
@@ -25,12 +29,19 @@ runs:
       shell: bash
     - run: conan profile update settings.compiler.libcxx=libstdc++11 default
       shell: bash
+    - run: >
+        conan profile update settings.compiler=clang default &&
+        conan profile update env.CC=clang default &&
+        conan profile update env.CXX=clang++ default
+      if: ${{inputs.cpp_compiler}} == 'clang++'
+      shell: bash
     - run: mkdir ${{inputs.build_dir}}
       shell: bash
     - run: >
         conan install
         --settings:host build_type=${{inputs.build_type}}
         --settings:host compiler.cppstd=17
+        ${{inputs.extra_conan_options}}
         --install-folder ${{inputs.build_dir}}
         --build=missing
         ./conanfile.txt
@@ -43,5 +54,6 @@ runs:
         -DCMAKE_BUILD_TYPE=${{inputs.build_type}}
         -DCMAKE_C_COMPILER=${{inputs.c_compiler}}
         -DCMAKE_CXX_COMPILER=${{inputs.cpp_compiler}}
+        ${{inputs.extra_cmake_options}}
         -S . -B ${{inputs.build_dir}}
       shell: bash

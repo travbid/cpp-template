@@ -12,6 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 option(USE_LTO "Enable Link-Time Optimization for Release builds" ON)
+option(USE_LIBC++ "Add the compilation flag -stdlib=libc++" OFF)
 option(BUILD_TESTS "Build the tests" ON)
 
 # https://www.kitware.com/cmake-and-the-default-build-type/
@@ -42,6 +43,10 @@ if(MSVC)
   add_compile_options($<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,19.10>:/permissive->)
 else()
   add_compile_options(-Wall -Wextra -Wpedantic)
+  if(USE_LIBC++)
+    add_compile_options(-stdlib=libc++)
+    add_link_options(-stdlib=libc++)
+  endif()
 endif()
 
 if(USE_LTO)
