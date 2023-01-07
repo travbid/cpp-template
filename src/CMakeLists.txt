@@ -10,21 +10,16 @@ set(cppsample_headers
   ../include/sub.hpp
 )
 
-add_library(cppsample_objects OBJECT
+set(cppsample_sources
   add.cpp
   sub.cpp
   ${cppsample_headers}
 )
 
-target_include_directories(cppsample_objects
-  PUBLIC ${PROJECT_SOURCE_DIR}/include
-  PUBLIC ${CMAKE_BINARY_DIR}/src
-)
-
 if(BUILD_SHARED_LIBS)
-  add_library(cppsample SHARED $<TARGET_OBJECTS:cppsample_objects>)
+  add_library(cppsample SHARED ${cppsample_sources})
 else()
-  add_library(cppsample STATIC $<TARGET_OBJECTS:cppsample_objects>)
+  add_library(cppsample STATIC ${cppsample_sources})
 endif()
 
 add_library(trav::cppsample ALIAS cppsample)
