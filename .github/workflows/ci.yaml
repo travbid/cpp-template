@@ -52,6 +52,21 @@ jobs:
       - run: cmake --build build_clang --config Release --verbose
       - run: tree .
 
+  build-with-libcplusplus:
+    name: Build with libc++
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/configure-project
+        with:
+          build_dir: build_libcplusplus
+          cpp_compiler: clang++
+          extra_conan_options: '--settings:host compiler.libcxx=libc++'
+          extra_cmake_options: '-DUSE_LIBC++=ON'
+      - run: cmake --build build_libcplusplus --verbose
+      - run: tree .
+
   test:
     name: Test
     runs-on: ubuntu-latest
