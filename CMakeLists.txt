@@ -28,7 +28,7 @@ endif()
 
 # Enable colored warnings in Ninja's output, if the compiler has -fdiagnostics-color support.
 # https://github.com/ninja-build/ninja/issues/174
-if (CMAKE_GENERATOR STREQUAL "Ninja")
+if(CMAKE_GENERATOR STREQUAL "Ninja")
   add_compile_options($<$<COMPILE_LANG_AND_ID:C,GNU>:$<$<VERSION_GREATER_EQUAL:$<C_COMPILER_VERSION>,4.9>:-fdiagnostics-color=always>>)
   add_compile_options($<$<COMPILE_LANG_AND_ID:CXX,GNU>:$<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,4.9>:-fdiagnostics-color=always>>)
   add_compile_options($<$<COMPILE_LANG_AND_ID:C,Clang>:$<$<VERSION_GREATER_EQUAL:$<C_COMPILER_VERSION>,3.5>:-fcolor-diagnostics>>)
@@ -44,7 +44,7 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-if (USE_LTO)
+if(USE_LTO)
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_result OUTPUT ipo_output)
   if(ipo_result)
