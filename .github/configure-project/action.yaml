@@ -23,17 +23,20 @@ runs:
         sudo apt-get install -y
         ninja-build
       shell: bash
-    - run: python3 -m pip install --upgrade conan
+    - run: python3 -m pip install --upgrade conan toml-cli
       shell: bash
-    - run: conan profile new --detect --force default
+    - run: conan profile detect --name default --force
       shell: bash
-    - run: conan profile update settings.compiler.libcxx=libstdc++11 default
+    - run: echo compiler.libcxx=libstdc++11 >> $(conan profile path default)
       shell: bash
     - run: >
-        conan profile update settings.compiler=clang default &&
-        conan profile update env.CC=clang default &&
-        conan profile update env.CXX=clang++ default
+        echo compiler=clang >> $(conan profile path default) &&
+        echo [buildenv] >> $(conan profile path default) &&
+        echo CC=clang >> $(conan profile path default) &&
+        echo CXX=clang++ >> $(conan profile path default) 
       if: ${{inputs.cpp_compiler}} == 'clang++'
+      shell: bash
+    - run: conan profile show
       shell: bash
     - run: mkdir ${{inputs.build_dir}}
       shell: bash
@@ -42,7 +45,7 @@ runs:
         --settings:host build_type=${{inputs.build_type}}
         --settings:host compiler.cppstd=17
         ${{inputs.extra_conan_options}}
-        --install-folder ${{inputs.build_dir}}
+        --output-folder ${{inputs.build_dir}}
         --build=missing
         ./conanfile.txt
       shell: bash
