@@ -2,10 +2,10 @@
 gtest/1.12.1
 
 [options]
-gtest:shared=False
-gtest:build_gmock=True
-gtest:no_main=False
-gtest:hide_symbols=False
+gtest/*:shared=False
+gtest/*:build_gmock=True
+gtest/*:no_main=False
+gtest/*:hide_symbols=False
 
 [generators]
-cmake_find_package_multi
+CMakeDeps
