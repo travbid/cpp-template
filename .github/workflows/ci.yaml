@@ -67,6 +67,39 @@ jobs:
       - run: cmake --build build_libcplusplus --verbose
       - run: tree .
 
+  build-msvc:
+    name: Build with Visual Studio
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: python -m pip install --upgrade conan
+      - run: conan profile detect --name default --force
+      - run: (Get-Content $(conan profile path default)).replace("compiler.runtime=dynamic","compiler.runtime=static") | Set-Content $(conan profile path default)
+      - run: conan profile show
+      - run: mkdir build_msvc
+      - run: >
+          conan install
+          --settings:host build_type=Release
+          --settings:host compiler.cppstd=17
+          --output-folder build_msvc
+          --build=missing
+          ./conanfile.txt
+      - run: >
+          conan install
+          --settings:host build_type=Debug
+          --settings:host compiler.cppstd=17
+          --output-folder build_msvc
+          --build=missing
+          ./conanfile.txt
+      - run: >
+          cmake
+          -DCMAKE_BUILD_TYPE=Release
+          -G  "Visual Studio 17 2022"
+          -S . -B build_msvc
+      - run: cmake --build build_msvc --config Release --verbose
+      - run: cmake --build build_msvc --config Debug   --verbose
+
   test:
     name: Test
     runs-on: ubuntu-latest
